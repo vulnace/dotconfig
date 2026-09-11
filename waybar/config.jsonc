@@ -5,6 +5,7 @@
   "margin-top": 6,
   "margin-left": 10,
   "margin-right": 10,
+  "reload_style_on_change": true,
 
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock"],
@@ -22,6 +23,14 @@
     "max-length": 50
   },
 
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "active": "",
+      "default": ""
+    }
+  },
+
   "battery": {
     "interval": 60,
     "format": "{capacity}% {icon}",
@@ -36,7 +45,6 @@
       ]
     }
   },
-
 
 // bluetooth cmd's  
 // bluetoothctl scan on
@@ -68,13 +76,14 @@
 // CMD'S for wifi
 // nmcli device wifi list
 // nmcli device wifi connect "SSID" password "PASSWORD"
-"network": {
-    "format-wifi": " {essid}",
-    "format-disconnected": "󰤭",
-    "tooltip-format": "{ifname}\n{essid}\n{signalStrength}%",
-    "on-click": "kitty --title=wifi -e bash -c 'nmcli device wifi list; exec bash'"
-},
+  "network": {
+      "format-wifi": " {essid}",
+      "format-disconnected": "󰤭",
+      "tooltip-format": "{ifname}\n{essid}\n{signalStrength}%",
+      "on-click": "bash -c 'state=$(nmcli -t -f DEVICE,STATE device status | grep \"^wlan0:\" | cut -d: -f2); if [ \"$state\" = \"connected\" ]; then nmcli device disconnect wlan0; else nmcli device connect wlan0; fi'"
+  },
 
+    
   "clock": {
     "format": "󰥔 {:%a, %d. %b %I:%M %p}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
