@@ -1,4 +1,6 @@
-// install fonts using `sudo pacman -S ttf-jetbrains-mono-nerd`
+// install fonts using `ttf-jetbrains-mono-nerd` (pacman)
+// install `bluetoothctl` for bluetooth (pacman)
+// install `nmcli` for wifi (pacman)
 {
   "layer": "top",
   "height": 30,
@@ -16,7 +18,8 @@
     "bluetooth",
     "network",
     "cpu",
-    "memory"
+    "memory",
+    "custom/power"
   ],
 
   "hyprland/window": {
@@ -49,6 +52,9 @@
 // bluetooth cmd's  
 // bluetoothctl scan on
 // bluetoothctl connect {MAC ADDRESS} 
+
+// bluetooth autoconnect:
+// go to as sudo `/etc/bluetooth/main.conf` and uncomment  `AutoEnable=true` `ReconnectAttempts=7` `ReconnectIntervals=1,2,4,8,16,32,64` then `sudo systemctl restart bluetoot`
   "bluetooth": {
     "format": "󰂯",
     "format-disabled": "", // an empty format will hide the module
@@ -56,7 +62,8 @@
     "tooltip-format": "{controller_alias}\t{controller_address}",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-    "on-click": "kitty --title=bluetooth-scan -e bash -c 'bluetoothctl power on; bluetoothctl --timeout 15 scan on; bluetoothctl devices; exec bluetoothctl'"
+    "on-click": "bash -c 'bluetoothctl power on\nCONNECTED=$(bluetoothctl devices Connected | head -n1 | cut -d\" \" -f2)\nif [ -n \"$CONNECTED\" ]; then bluetoothctl disconnect \"$CONNECTED\"; else TARGET=$(bluetoothctl devices Paired | head -n1 | cut -d\" \" -f2); [ -n \"$TARGET\" ] && bluetoothctl connect \"$TARGET\"; fi'",
+    "on-click-right": "bash -c 'bluetoothctl power on\nbluetoothctl --timeout 10 scan on\nCHOICE=$(bluetoothctl devices | sed \"s/^Device //\" | wofi --dmenu --prompt \"Bluetooth Devices\" --width 320 --lines 10)\n[ -z \"$CHOICE\" ] && exit 0\nMAC=$(echo \"$CHOICE\" | cut -d\" \" -f1)\nbluetoothctl connect \"$MAC\"'"
   },
 
   "cpu": {
@@ -73,14 +80,22 @@
     "on-click": "ghostty --title=htop -e htop"
   },
 
+  "custom/power": {
+    "format": "⏻",
+    "tooltip": false,
+    "on-click": "bash -c 'CHOICE=$(printf \"Lock\nSuspend\nHibernate\nLogout\nReboot\nShutdown\" | wofi --dmenu --prompt \"Power Menu\" --width 200 --lines 6)\ncase \"$CHOICE\" in\n\"Lock\") hyprlock ;;\n\"Suspend\") systemctl suspend ;;\n\"Hibernate\") systemctl hibernate ;;\n\"Logout\") hyprctl dispatch exit ;;\n\"Reboot\") systemctl reboot ;;\n\"Shutdown\") systemctl poweroff ;;\nesac'"
+  },  
+
 // CMD'S for wifi
 // nmcli device wifi list
 // nmcli device wifi connect "SSID" password "PASSWORD"
+// right click on te wifi icon at waybar to scan for wifi access points (a popup will come)
   "network": {
       "format-wifi": " {essid}",
       "format-disconnected": "󰤭",
       "tooltip-format": "{ifname}\n{essid}\n{signalStrength}%",
-      "on-click": "bash -c 'state=$(nmcli -t -f DEVICE,STATE device status | grep \"^wlan0:\" | cut -d: -f2); if [ \"$state\" = \"connected\" ]; then nmcli device disconnect wlan0; else nmcli device connect wlan0; fi'"
+      "on-click": "bash -c 'state=$(nmcli -t -f DEVICE,STATE device status | grep \"^wlan0:\" | cut -d: -f2); if [ \"$state\" = \"connected\" ]; then nmcli device disconnect wlan0; else nmcli device connect wlan0; fi'",
+      "on-click-right": "bash -c 'nmcli device wifi rescan\nsleep 2\nSSID=$(nmcli -t -f SSID device wifi list | sort -u | grep -v \"^$\" | wofi --dmenu --prompt \"Wi-Fi Networks\" --width 320 --lines 10)\n[ -z \"$SSID\" ] && exit 0\nif nmcli -t -f NAME connection show | grep -qx \"$SSID\"; then nmcli connection up \"$SSID\"; else SEC=$(nmcli -t -f SSID,SECURITY device wifi list | grep \"^$SSID:\" | head -n1 | cut -d: -f2); if [ \"$SEC\" = \"--\" ]; then nmcli device wifi connect \"$SSID\"; else PASS=$(wofi --dmenu --password --prompt \"Password for $SSID\"); nmcli device wifi connect \"$SSID\" password \"$PASS\"; fi; fi'"
   },
 
     

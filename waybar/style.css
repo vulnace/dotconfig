@@ -38,7 +38,8 @@ window#waybar {
 #network,
 #cpu,
 #memory,
-#volume {
+#volume,
+#custom-power {
   border-radius: 10px;
   padding: 3px 6px;
   background: @dark-8;
