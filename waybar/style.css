@@ -89,3 +89,10 @@ tooltip {
 tooltip label {
   color: white;
 }
+
+#network.speed {
+  border-radius: 10px;
+  padding: 1px 6px;
+  background: @dark-8;
+  margin: 3px 6px 3px 0px;
+}

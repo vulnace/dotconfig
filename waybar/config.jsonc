@@ -15,8 +15,10 @@
     "hyprland/submap",
     "group/volume",
     "battery",
+    "custom/battery-alert",
     "bluetooth",
     "network",
+    "network#speed",
     "cpu",
     "memory",
     "custom/power"
@@ -47,6 +49,12 @@
         "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"
       ]
     }
+  },
+
+  "custom/battery-alert": {
+    "exec": "bash -c 'CAP=$(cat /sys/class/power_supply/BAT1/capacity); STATUS=$(cat /sys/class/power_supply/BAT1/status); if [ \"$STATUS\" = \"Discharging\" ] && [ \"$CAP\" -le 20 ] && [ ! -f /tmp/battery_alert_sent ]; then notify-send -u critical \"Battery Low\" \"Battery at ${CAP}%. Plug in the charger.\"; touch /tmp/battery_alert_sent; fi; if [ \"$STATUS\" = \"Charging\" ]; then rm -f /tmp/battery_alert_sent; fi'",
+    "interval": 60,
+    "format": ""
   },
 
 // bluetooth cmd's  
@@ -98,7 +106,12 @@
       "on-click-right": "bash -c 'nmcli device wifi rescan\nsleep 2\nSSID=$(nmcli -t -f SSID device wifi list | sort -u | grep -v \"^$\" | wofi --dmenu --prompt \"Wi-Fi Networks\" --width 320 --lines 10)\n[ -z \"$SSID\" ] && exit 0\nif nmcli -t -f NAME connection show | grep -qx \"$SSID\"; then nmcli connection up \"$SSID\"; else SEC=$(nmcli -t -f SSID,SECURITY device wifi list | grep \"^$SSID:\" | head -n1 | cut -d: -f2); if [ \"$SEC\" = \"--\" ]; then nmcli device wifi connect \"$SSID\"; else PASS=$(wofi --dmenu --password --prompt \"Password for $SSID\"); nmcli device wifi connect \"$SSID\" password \"$PASS\"; fi; fi'"
   },
 
-    
+  "network#speed": {
+    "interval": 1,
+    "format": "↓ {bandwidthDownBits} ↑ {bandwidthUpBits}",
+    "tooltip": false
+  },
+ 
   "clock": {
     "format": "󰥔 {:%a, %d. %b %I:%M %p}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>",

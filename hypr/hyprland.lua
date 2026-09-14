@@ -290,11 +290,12 @@ hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
--- Suspend
+
+-- Suspends
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("systemctl suspend"))
 
---hybernatel
---hl.bind(mainMod .. " + L", hl.dsp.exec_cmd(suspend))
+-- Hibernate
+--hl.bind(mainMod .. " + H", hl.dsp.exec_cmd("systemctl hibernate"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
