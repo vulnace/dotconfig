@@ -103,7 +103,7 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.config({
     general = {
         gaps_in  = 5,
-        gaps_out = 10,
+        gaps_out = 7,
 
         border_size = 1,
 
@@ -126,8 +126,12 @@ hl.config({
         rounding_power = 2,
 
         -- Change transparency of focused and unfocused windows
-        active_opacity   = 0.95,
-        inactive_opacity = 0.95,
+        --active_opacity   = 0.95,
+        --inactive_opacity = 0.95,
+
+        -- Transparency off
+        active_opacity   = 1,
+        inactive_opacity = 1,        
 
         shadow = {
             enabled      = false,

@@ -13,14 +13,14 @@
   "modules-center": ["clock"],
   "modules-right": [
     "hyprland/submap",
-    "group/volume",
-    "battery",
+    "network#speed",
     "custom/battery-alert",
     "bluetooth",
     "network",
-    "network#speed",
+    "group/volume",    
     "cpu",
     "memory",
+    "battery",
     "custom/power"
   ],
 
@@ -57,9 +57,9 @@
     "format": ""
   },
 
-// bluetooth cmd's  
+// bluetooth cmd's
 // bluetoothctl scan on
-// bluetoothctl connect {MAC ADDRESS} 
+// bluetoothctl connect {MAC ADDRESS}
 
 // bluetooth autoconnect:
 // go to as sudo `/etc/bluetooth/main.conf` and uncomment  `AutoEnable=true` `ReconnectAttempts=7` `ReconnectIntervals=1,2,4,8,16,32,64` then `sudo systemctl restart bluetoot`
@@ -71,7 +71,7 @@
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
     "on-click": "bash -c 'bluetoothctl power on\nCONNECTED=$(bluetoothctl devices Connected | head -n1 | cut -d\" \" -f2)\nif [ -n \"$CONNECTED\" ]; then bluetoothctl disconnect \"$CONNECTED\"; else TARGET=$(bluetoothctl devices Paired | head -n1 | cut -d\" \" -f2); [ -n \"$TARGET\" ] && bluetoothctl connect \"$TARGET\"; fi'",
-    "on-click-right": "bash -c 'bluetoothctl power on\nbluetoothctl --timeout 10 scan on\nCHOICE=$(bluetoothctl devices | sed \"s/^Device //\" | wofi --dmenu --prompt \"Bluetooth Devices\" --width 320 --lines 10)\n[ -z \"$CHOICE\" ] && exit 0\nMAC=$(echo \"$CHOICE\" | cut -d\" \" -f1)\nbluetoothctl connect \"$MAC\"'"
+    "on-click-right": "bash -c 'bluetoothctl power on\nbluetoothctl --timeout 1 scan on\nCHOICE=$(bluetoothctl devices | sed \"s/^Device //\" | wofi --dmenu --prompt \"Bluetooth Devices\" --width 320 --lines 10)\n[ -z \"$CHOICE\" ] && exit 0\nMAC=$(echo \"$CHOICE\" | cut -d\" \" -f1)\nbluetoothctl connect \"$MAC\"'"
   },
 
   "cpu": {
