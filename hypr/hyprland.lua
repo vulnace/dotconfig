@@ -83,16 +83,35 @@ hl.env("HYPRCURSOR_SIZE", "24")
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Permissions/
 -- Please note permission changes here require a Hyprland restart and are not applied on-the-fly
 -- for security reasons
+-- sudo pacman -S grim slurp wl-clipboard wf-recorder
 
--- hl.config({
---   ecosystem = {
---     enforce_permissions = true,
---   },
--- })
+-- Enable Hyprland's permission system
+hl.config({
+    ecosystem = {
+        enforce_permissions = true,
+    },
+})
 
--- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
--- hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
--- hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
+-- Allow screenshots
+hl.permission({
+    binary = "/usr/(bin|local/bin)/grim",
+    type = "screencopy",
+    mode = "allow",
+})
+
+-- Allow screen recording
+hl.permission({
+    binary = "/usr/(bin|local/bin)/wf-recorder",
+    type = "screencopy",
+    mode = "allow",
+})
+
+-- Allow screen sharing through xdg-desktop-portal-hyprland
+hl.permission({
+    binary = "/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland",
+    type = "screencopy",
+    mode = "allow",
+})
 
 
 -----------------------
@@ -303,6 +322,14 @@ hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
 
 -- Hibernate
 --hl.bind(mainMod .. " + H", hl.dsp.exec_cmd("systemctl hibernate"))
+
+-- Screenshots
+-- Print → select area → save to Pictures + copy to clipboard
+hl.bind("Print", hl.dsp.exec_cmd("bash -c 'FILE=\"$HOME/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png\"; grim -g \"$(slurp)\" \"$FILE\" && wl-copy < \"$FILE\"'"))
+
+-- SUPER + Print → full screen → save to Pictures + copy to clipboard
+hl.bind("SUPER + Print", hl.dsp.exec_cmd("bash -c 'FILE=\"$HOME/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png\"; grim \"$FILE\" && wl-copy < \"$FILE\"'"))
+
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
