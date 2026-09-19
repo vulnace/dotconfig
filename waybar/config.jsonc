@@ -66,7 +66,7 @@
   "bluetooth": {
     "format": "󰂯",
     "format-disabled": "", // an empty format will hide the module
-    "format-connected": "󰂱 {device_alias}",
+    "format-connected": "󰂱 {device_alias} {device_battery_percentage}%",
     "tooltip-format": "{controller_alias}\t{controller_address}",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
@@ -91,7 +91,7 @@
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
-    "on-click": "bash -c 'CHOICE=$(printf \"Lock\nSuspend\nHibernate\nLogout\nReboot\nShutdown\" | wofi --dmenu --prompt \"Power Menu\" --width 200 --lines 6)\ncase \"$CHOICE\" in\n\"Lock\") hyprlock ;;\n\"Suspend\") systemctl suspend ;;\n\"Hibernate\") systemctl hibernate ;;\n\"Logout\") hyprctl dispatch exit ;;\n\"Reboot\") systemctl reboot ;;\n\"Shutdown\") systemctl poweroff ;;\nesac'"
+    "on-click": "bash -c 'CHOICE=$(printf \"Shutdown\nReboot\nLogout\nHibernate\nSuspend\" | wofi --dmenu --prompt \"Power Menu\" --width 200 --lines 5)\ncase \"$CHOICE\" in\n\"Shutdown\") systemctl poweroff ;;\n\"Reboot\") systemctl reboot ;;\n\"Logout\") hyprctl dispatch exit ;;\n\"Hibernate\") systemctl hibernate ;;\n\"Suspend\") systemctl suspend ;;\nesac'"
   },  
 
 // CMD'S for wifi
