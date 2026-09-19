@@ -330,6 +330,8 @@ hl.bind("Print", hl.dsp.exec_cmd("bash -c 'FILE=\"$HOME/Pictures/screenshot-$(da
 -- SUPER + Print → full screen → save to Pictures + copy to clipboard
 hl.bind("SUPER + Print", hl.dsp.exec_cmd("bash -c 'FILE=\"$HOME/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png\"; grim \"$FILE\" && wl-copy < \"$FILE\"'"))
 
+-- SUPER + R → start/stop screen recording
+hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("if pgrep -x wf-recorder >/dev/null; then pkill -INT -x wf-recorder; else wf-recorder -g \"$(slurp)\" -f \"$HOME/Videos/recording-$(date +%Y%m%d-%H%M%S).mp4\" & fi"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
