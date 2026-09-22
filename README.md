@@ -3,6 +3,11 @@
 A complete, production-ready dotfiles setup for Hyprland with supporting tools (Waybar, Kitty, Wofi, Starship, Hyprpaper, Hyprlock, Hypridle).
 
 ---
+## Demo
+
+<p align="center">
+  <img src="docs/m4dara.png" width="900"/>
+</p>
 
 ## Repository Structure
 
